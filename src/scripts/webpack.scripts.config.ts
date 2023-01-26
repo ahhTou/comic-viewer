@@ -1,6 +1,15 @@
 import path from 'path';
 import webpack from 'webpack';
 
+const cssLoader = {
+    loader: 'css-loader',
+    options: {
+        modules: {
+            localIdentName: '[local]-[hash:5]',
+        },
+    },
+};
+
 const config: webpack.Configuration = {
     devtool: 'eval-source-map',
     entry: path.resolve(__dirname, '../app.ts'),
@@ -19,11 +28,11 @@ const config: webpack.Configuration = {
         rules: [
             {
                 test: /\.less$/i,
-                use: ['style-loader', 'css-loader', 'less-loader'],
+                use: ['style-loader', cssLoader, 'less-loader'],
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
+                use: ['style-loader', cssLoader],
             },
             {
                 test: /\.(ts|tsx)$/,
@@ -39,7 +48,7 @@ const config: webpack.Configuration = {
         new webpack.CleanPlugin(),
     ],
     target: 'web',
-    mode: 'development',
+    mode: 'production',
 };
 
 export default config;

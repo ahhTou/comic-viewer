@@ -1,0 +1,27 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgb(50, 50, 50);
+
+    .status {
+        font-size: 24px;
+
+        &.loading {
+            color: #067dcb;
+        }
+
+        &.pending {
+            color: #8cba6d;
+        }
+
+        &.error {
+            color: #db616a;
+        }
+
+        &.display {
+            display: none;
+        }
+    }
+}
