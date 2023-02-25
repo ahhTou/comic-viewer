@@ -17,6 +17,8 @@ interface ViewerRef {
     close: () => void;
 }
 
+type ResizeBarRole = 'left' | 'right';
+
 const localWidth = store.get(StoreKeys.PictureWidth) || 60;
 
 const ViewerComponent = forwardRef<ViewerRef>(
@@ -28,8 +30,10 @@ const ViewerComponent = forwardRef<ViewerRef>(
         const [height, setHeight] = useState<string>(localWidth * 1.3 + 'vw');
 
         const posRef = useRef<number>(0);
-
         const imagesRef = useRef<HTMLDivElement>(null);
+        const roleRef = useRef<ResizeBarRole>('left');
+        const scrollBoxRef = useRef<HTMLDivElement>(null);
+        const { current: $scrollBox } = scrollBoxRef;
 
         const [imgStatus, setImgStatus] = useState<
             Record<string, PictureStatus>
@@ -87,7 +91,8 @@ const ViewerComponent = forwardRef<ViewerRef>(
 
                 setHeight((number - vw) * 1.3 + 'vw');
 
-                const retValue = number - vw;
+                const retValue =
+                    roleRef.current === 'left' ? number + vw : number - vw;
 
                 store.set(StoreKeys.PictureWidth, retValue);
 
@@ -95,10 +100,13 @@ const ViewerComponent = forwardRef<ViewerRef>(
             });
         }, []);
 
-        const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = (
-            e
+        const handleMouseDown = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            role: ResizeBarRole
         ) => {
             posRef.current = e.clientX;
+
+            roleRef.current = role;
 
             document.addEventListener('mousemove', handleMouseMove);
         };
@@ -163,7 +171,7 @@ const ViewerComponent = forwardRef<ViewerRef>(
                             const willLoadURLs: string[] = [];
 
                             const curIdx = imgURLs.indexOf(curURL);
-                            const endIdx = curIdx + 3 > len ? len : curIdx + 3;
+                            const endIdx = curIdx + 5 > len ? len : curIdx + 3;
 
                             for (let i = curIdx; i < endIdx; i++) {
                                 const willLoadURL = imgURLs[i];
@@ -210,11 +218,11 @@ const ViewerComponent = forwardRef<ViewerRef>(
                 })}
                 onDoubleClick={close}
             >
-                <div className={c(styles.scrollBox)}>
+                <div className={c(styles.scrollBox)} ref={scrollBoxRef}>
                     <div className={c(styles.imagesWrapper)}>
                         <div
                             className={c(styles.resizeBar)}
-                            onMouseDown={handleMouseDown}
+                            onMouseDown={(e) => handleMouseDown(e, 'left')}
                         />
                         <div className={c(styles.images)} ref={imagesRef}>
                             {imgURLs?.map((url, i) => {
@@ -245,8 +253,30 @@ const ViewerComponent = forwardRef<ViewerRef>(
                         </div>
                         <div
                             className={c(styles.resizeBar)}
-                            onMouseDown={handleMouseDown}
+                            onMouseDown={(e) => handleMouseDown(e, 'right')}
                         />
+                    </div>
+                    <div className={c(styles.fixedTools)}>
+                        <div
+                            className={c(styles.action)}
+                            onClick={() => {
+                                $scrollBox?.scrollTo({
+                                    top: 0,
+                                });
+                            }}
+                        >
+                            回到顶部
+                        </div>
+                        <div
+                            className={c(styles.action)}
+                            onClick={() => {
+                                $scrollBox?.scrollTo({
+                                    top: $scrollBox.scrollHeight,
+                                });
+                            }}
+                        >
+                            跳到底部
+                        </div>
                     </div>
                 </div>
             </div>

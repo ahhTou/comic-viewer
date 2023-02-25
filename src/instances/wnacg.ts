@@ -30,10 +30,9 @@ export default class Wnacg {
     }
 
     async init() {
-        const imgURLs = await this.getImageURLs();
-
         // 插入 open button
         if (isComicInfoPage()) {
+            const imgURLs = await this.getImageURLs();
             this.insertOpenButton();
 
             let overflow = '';

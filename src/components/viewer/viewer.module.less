@@ -39,14 +39,14 @@
         align-self: baseline;
 
         .resizeBar {
-            width: 6px;
+            width: 32px;
             background: transparent;
             transition: all 0.3s;
             margin: 0 4px;
 
             &:hover {
                 cursor: col-resize;
-                background: rgb(230, 230, 230);
+                background: rgb(60, 60, 60);
             }
         }
 
@@ -69,6 +69,26 @@
             display: flex;
             width: 100%;
             justify-content: flex-end;
+        }
+    }
+
+    .fixedTools {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        color: #eee;
+
+        height: 30px;
+
+        .action {
+            margin: 0 8px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .action:hover {
+            opacity: 0.8;
         }
     }
 }

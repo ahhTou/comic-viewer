@@ -44,8 +44,9 @@ function print(url: string) {
     bluePrint('// @version      0.1');
     bluePrint('// @description  try to take over the world!');
     bluePrint('// @author       ahhTou');
-    bluePrint('// @match        https://nhentai.net/*');
+    // bluePrint('// @match        https://nhentai.net/*');
     bluePrint('// @match        https://wnacg.com/*');
+    bluePrint('// @match        http://localhost/*');
     bluePrint(
         '// @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net'
     );
